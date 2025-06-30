@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>चैट ऐप</title>
+    <title>आधुनिक चैट ऐप</title>
 
     <style>
         /* सामान्य स्टाइलिंग */
@@ -23,55 +23,93 @@
 
         /* हेडर */
         .header {
-            background: rgba(0, 0, 0, 0.2); /* हल्का पारदर्शी काला */
+            background: rgba(0, 0, 0, 0.15); /* थोड़ा हल्का पारदर्शी काला */
             backdrop-filter: blur(10px); /* बैकग्राउंड ब्लर इफ़ेक्ट */
-            padding: 10px 15px;
+            padding: 8px 15px; /* हेडर की पैडिंग थोड़ी बढ़ाई गई */
             display: flex;
             align-items: center; /* वर्टिकल अलाइनमेंट */
             justify-content: space-between; /* तत्वों के बीच स्पेस */
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* हल्का बॉर्डर */
-            height: 50px; /* हेडर की ऊंचाई */
-            flex-wrap: wrap; /* छोटे स्क्रीन पर रैप करने के लिए */
-            justify-content: center; /* छोटे स्क्रीन पर सेंटर अलाइन करने के लिए */
+            border-bottom: 1px solid rgba(255, 255, 255, 0.08); /* बहुत हल्का बॉर्डर */
+            height: 55px; /* हेडर की ऊंचाई थोड़ी बढ़ाई गई */
+            position: relative; /* मेनू के लिए */
+            z-index: 100; /* यह सुनिश्चित करने के लिए कि हेडर हमेशा ऊपर रहे */
         }
 
-        .header .app-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin: 0 15px; /* हेडर के बटनों से थोड़ा मार्जिन */
-        }
-
-        .header-buttons {
+        .header-left {
             display: flex;
             align-items: center;
-            gap: 10px; /* बटनों के बीच स्पेस */
+            gap: 10px; /* आइकन और टाइटल के बीच स्पेस */
         }
 
-        .home-btn, .profile-btn, .share-btn {
-            color: white;
+        .app-title {
+            font-size: 19px; /* फॉन्ट साइज़ थोड़ा कम किया गया */
+            font-weight: bold;
+            color: #e0e0e0; /* थोड़ा हल्का रंग */
+            text-shadow: 0 0 5px rgba(255, 255, 255, 0.5); /* हल्का टेक्स्ट शैडो */
+        }
+
+        /* मेनू बटन (होम बटन फंक्शनलिटी) */
+        .menu-btn {
+            background: transparent; /* ट्रांसपेरेंट बैकग्राउंड */
             border: none;
-            padding: 8px 18px; /* पैडिंग बढ़ाई गई */
-            border-radius: 25px; /* गोल किनारे */
+            color: white;
+            font-size: 24px; /* आइकन के लिए बड़ा साइज़ */
             cursor: pointer;
-            font-size: 13px; /* फॉन्ट साइज़ बढ़ाया गया */
-            font-weight: bold;
-            transition: all 0.3s ease; /* स्मूथ ट्रांजिशन */
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3); /* शैडो */
             display: flex;
             align-items: center;
-            gap: 8px; /* आइकन और टेक्स्ट के बीच स्पेस */
+            justify-content: center;
+            padding: 5px; /* थोड़ी पैडिंग */
+            transition: all 0.2s ease;
+            margin-right: 5px; /* टाइटल से थोड़ा मार्जिन */
+        }
+        .menu-btn:hover {
+            color: #ddd;
+            transform: scale(1.1);
         }
 
-        .home-btn { background: linear-gradient(45deg, #ff4757, #ff6b7a); } /* लाल ग्रेडिएंट */
-        .home-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4); }
-
-        .profile-btn { background: linear-gradient(45deg, #2ecc71, #27ae60); } /* हरा ग्रेडिएंट */
-        .profile-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(46, 204, 113, 0.4); }
-
-        .share-btn {
-            background: linear-gradient(45deg, #f39c12, #e67e22); /* नारंगी ग्रेडिएंट */
+        /* मेनू (होम बटन पर क्लिक करने पर दिखने वाला) */
+        .header-menu {
+            position: absolute;
+            top: 60px; /* हेडर के ठीक नीचे */
+            left: 15px; /* बाएं किनारे से थोड़ा */
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px 0;
+            display: none; /* डिफ़ॉल्ट रूप से छिपा हुआ */
+            z-index: 101;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+            animation: popIn 0.2s ease;
         }
-        .share-btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(243, 152, 18, 0.4); }
+
+        .header-menu.show {
+            display: block;
+        }
+
+        .header-menu-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 20px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            white-space: nowrap; /* एक लाइन में रखें */
+        }
+
+        .header-menu-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(5px);
+        }
+
+        .header-menu-item i { /* आइकन के लिए */
+            font-size: 18px;
+            width: 25px; /* आइकन के लिए फिक्स चौड़ाई */
+            text-align: center;
+        }
 
         /* प्रोफाइल मोडल */
         .modal {
@@ -89,12 +127,13 @@
         .modal-content {
             background: linear-gradient(145deg, #667eea, #764ba2); /* बैंगनी ग्रेडिएंट */
             margin: 10% auto; /* ऊपर से 10% और बीच में */
-            padding: 25px; /* पैडिंग बढ़ाई गई */
+            padding: 20px;
             border-radius: 15px; /* गोल किनारे */
             width: 90%;
             max-width: 400px; /* अधिकतम चौड़ाई */
             color: white;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* शैडो */
+            position: relative; /* क्लोज बटन के लिए */
         }
 
         .modal-header {
@@ -124,6 +163,9 @@
             align-items: center;
             justify-content: center;
             transition: all 0.2s ease;
+            position: absolute; /* हेडर से बाहर निकालने के लिए */
+            top: 15px; /* हेडर के टॉप से थोड़ा नीचे */
+            right: 15px; /* हेडर के राइट से थोड़ा अंदर */
         }
 
         .close:hover {
@@ -149,10 +191,10 @@
         }
 
         .form-group input {
-            padding: 12px; /* पैडिंग बढ़ाई गई */
+            padding: 10px;
             border: none;
-            border-radius: 10px; /* गोल किनारे */
-            font-size: 15px; /* फॉन्ट साइज़ बढ़ाया गया */
+            border-radius: 8px;
+            font-size: 14px;
             background: rgba(255, 255, 255, 0.9); /* हल्का पारदर्शी सफेद */
             color: #333; /* टेक्स्ट का रंग */
             transition: all 0.2s ease;
@@ -166,7 +208,7 @@
         .emoji-selector {
             display: grid;
             grid-template-columns: repeat(8, 1fr); /* 8 कॉलम ग्रिड */
-            gap: 10px; /* गैप बढ़ाया गया */
+            gap: 8px;
             background: rgba(255, 255, 255, 0.1); /* हल्का पारदर्शी सफेद बैकग्राउंड */
             padding: 15px;
             border-radius: 10px;
@@ -179,7 +221,7 @@
             border-radius: 8px;
             padding: 8px;
             cursor: pointer;
-            font-size: 24px; /* Emoji साइज़ बढ़ाया गया */
+            font-size: 20px;
             transition: all 0.3s ease;
             text-align: center; /* emoji को सेंटर में */
             display: flex; /* सेंटर करने के लिए */
@@ -202,10 +244,10 @@
             background: linear-gradient(45deg, #2ecc71, #27ae60); /* हरा ग्रेडिएंट */
             color: white;
             border: none;
-            padding: 12px;
-            border-radius: 10px; /* गोल किनारे */
+            padding: 10px; /* पैडिंग थोड़ी कम की गई */
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 15px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 14px; /* फॉन्ट साइज़ थोड़ा कम किया गया */
             font-weight: bold;
             transition: all 0.3s ease;
             box-shadow: 0 3px 10px rgba(46, 204, 113, 0.3);
@@ -221,7 +263,7 @@
         .fav-friend-item {
             background: rgba(255, 255, 255, 0.1);
             margin: 6px 0;
-            padding: 12px; /* पैडिंग बढ़ाई गई */
+            padding: 10px;
             border-radius: 12px;
             display: flex;
             align-items: center;
@@ -232,20 +274,20 @@
 
         .fav-friend-item:hover {
             background: rgba(255, 255, 255, 0.2);
-            transform: translateX(5px); /* थोड़ा खिसकाव */
+            transform: translateX(3px);
         }
 
         /* मुख्य कंटेनर */
         .main-container {
             display: flex;
-            height: calc(100vh - 50px); /* हेडर की ऊंचाई छोड़कर बाकी */
+            height: calc(100vh - 55px); /* हेडर की नई ऊंचाई के अनुसार अपडेटेड */
         }
 
         /* उपयोगकर्ता साइडबार */
         .users-panel {
-            width: 280px; /* चौड़ाई बढ़ाई गई */
-            background: rgba(255, 255, 255, 0.05); /* बैकग्राउंड थोड़ा हल्का */
-            backdrop-filter: blur(20px); /* ब्लर इफ़ेक्ट थोड़ा और */
+            width: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(15px);
             border-right: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0; /* यह सिकुड़ेगा नहीं */
             display: flex;
@@ -253,11 +295,11 @@
         }
 
         .users-header {
-            padding: 15px; /* पैडिंग बढ़ाई गई */
+            padding: 12px;
             background: linear-gradient(45deg, #5f27cd, #a55eea); /* बैंगनी ग्रेडिएंट */
             color: white;
             text-align: center;
-            font-size: 14px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 13px;
             font-weight: bold;
             display: flex;
             align-items: center;
@@ -268,24 +310,24 @@
 
         .online-badge {
             background: rgba(255, 255, 255, 0.2);
-            padding: 4px 10px; /* पैडिंग बढ़ाई गई */
-            border-radius: 12px; /* गोल किनारे */
-            font-size: 11px; /* फॉन्ट साइज़ बढ़ाया गया */
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 10px;
             font-weight: bold;
         }
 
         .users-list {
-            height: calc(100% - 60px); /* हेडर की ऊंचाई छोड़कर */
+            height: calc(100% - 50px); /* हेडर की ऊंचाई छोड़कर */
             overflow-y: auto; /* स्क्रॉल बार */
-            padding: 10px; /* पैडिंग बढ़ाई गई */
+            padding: 8px;
             flex-grow: 1; /* बची हुई जगह ले लेगा */
         }
 
         .user-item {
-            background: rgba(255, 255, 255, 0.08); /* बैकग्राउंड थोड़ा और पारदर्शी */
-            margin: 8px 0; /* मार्जिन बढ़ाया गया */
-            padding: 10px 15px; /* पैडिंग बढ़ाई गई */
-            border-radius: 15px; /* गोल किनारे */
+            background: rgba(255, 255, 255, 0.08);
+            margin: 6px 0;
+            padding: 10px;
+            border-radius: 12px;
             display: flex;
             align-items: center;
             cursor: pointer;
@@ -295,21 +337,21 @@
 
         .user-item:hover {
             background: rgba(255, 255, 255, 0.15);
-            transform: translateX(5px); /* थोड़ा खिसकाव */
+            transform: translateX(3px);
         }
 
         .user-avatar {
-            width: 40px; /* साइज़ बढ़ाया गया */
-            height: 40px; /* साइज़ बढ़ाया गया */
+            width: 35px;
+            height: 35px;
             background: linear-gradient(45deg, #ff9ff3, #f368e0); /* गुलाबी ग्रेडिएंट */
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 20px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 18px;
             color: white;
-            margin-right: 15px; /* मार्जिन बढ़ाया गया */
+            margin-right: 10px;
             flex-shrink: 0; /* सिकुड़ेगा नहीं */
             box-shadow: 0 2px 8px rgba(0,0,0,0.2); /* शैडो */
         }
@@ -323,23 +365,23 @@
 
         .user-name {
             color: white;
-            font-size: 14px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 13px;
             font-weight: bold;
-            margin-bottom: 3px;
+            margin-bottom: 2px;
         }
 
         .user-status {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 11px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 10px;
         }
 
         .online-dot {
-            width: 10px; /* साइज़ बढ़ाया गया */
-            height: 10px; /* साइज़ बढ़ाया गया */
+            width: 8px;
+            height: 8px;
             background: #2ed573; /* हरा रंग */
             border-radius: 50%;
-            margin-left: 15px; /* दाईं ओर स्पेस */
             animation: blink 2s infinite; /* ब्लिंकिंग एनीमेशन */
+            margin-left: 10px; /* दाईं ओर स्पेस */
             box-shadow: 0 0 5px rgba(46, 204, 113, 0.8); /* शैडो */
         }
 
@@ -358,10 +400,10 @@
         }
 
         .chat-header {
-            padding: 15px; /* पैडिंग बढ़ाई गई */
-            background: rgba(0, 0, 0, 0.15); /* थोड़ा गहरा बैकग्राउंड */
+            padding: 12px 15px;
+            background: rgba(0, 0, 0, 0.1);
             color: white;
-            font-size: 15px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 14px;
             font-weight: bold;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0; /* सिकुड़ेगा नहीं */
@@ -374,10 +416,10 @@
             background: rgba(255, 255, 255, 0.2);
             color: white;
             border: none;
-            padding: 6px 12px; /* पैडिंग बढ़ाई गई */
-            border-radius: 18px; /* गोल किनारे */
+            padding: 5px 10px;
+            border-radius: 15px;
             cursor: pointer;
-            font-size: 12px; /* फॉन्ट साइज़ कम किया गया */
+            font-size: 11px;
             font-weight: bold;
             transition: all 0.3s ease;
             margin-right: 10px;
@@ -388,25 +430,42 @@
             transform: scale(1.05);
         }
 
+        /* नया चैट क्लियर बटन */
+        .clear-chat-btn {
+            background: rgba(255, 0, 0, 0.2); /* लाल रंग के साथ पारदर्शी */
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 11px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            margin-left: auto; /* इसे दाईं ओर ले जाएगा */
+            margin-right: 10px;
+        }
+        .clear-chat-btn:hover {
+            background: rgba(255, 0, 0, 0.4);
+            transform: scale(1.05);
+        }
 
         .messages-container {
             flex: 1; /* संदेशों को बाकी जगह देगा */
-            padding: 15px 20px; /* पैडिंग बढ़ाई गई */
+            padding: 15px;
             overflow-y: auto; /* स्क्रॉल करने योग्य */
             display: flex;
             flex-direction: column;
-            gap: 12px; /* संदेशों के बीच स्पेस बढ़ाया गया */
+            gap: 10px; /* संदेशों के बीच स्पेस */
             min-height: 0; /* स्क्रॉलिंग के लिए आवश्यक */
         }
 
         .message {
             max-width: 65%; /* संदेशों की अधिकतम चौड़ाई */
-            padding: 12px 18px; /* पैडिंग बढ़ाई गई */
-            border-radius: 20px; /* गोल किनारे */
+            padding: 10px 15px;
+            border-radius: 18px;
             position: relative;
             animation: fadeIn 0.3s ease;
             user-select: none; /* संदेश पर सेलेक्ट को रोकना */
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* हल्का शैडो */
         }
 
         @keyframes fadeIn {
@@ -418,45 +477,45 @@
             background: linear-gradient(135deg, #667eea, #764ba2); /* बैंगनी ग्रेडिएंट */
             color: white;
             align-self: flex-end; /* दाईं ओर अलाइन */
-            border-bottom-right-radius: 8px; /* बॉटम राइट कॉर्नर को थोड़ा कोना */
+            border-bottom-right-radius: 5px; /* बॉटम राइट कॉर्नर को थोड़ा कोना */
         }
 
         .message.received {
             background: rgba(255, 255, 255, 0.9); /* हल्का पारदर्शी सफेद */
             color: #333; /* गहरा टेक्स्ट रंग */
             align-self: flex-start; /* बाईं ओर अलाइन */
-            border-bottom-left-radius: 8px; /* बॉटम लेफ्ट कॉर्नर को थोड़ा कोना */
+            border-bottom-left-radius: 5px; /* बॉटम लेफ्ट कॉर्नर को थोड़ा कोना */
         }
 
         .msg-author {
             font-size: 11px;
             font-weight: bold;
-            margin-bottom: 5px; /* मार्जिन बढ़ाया गया */
+            margin-bottom: 3px;
             opacity: 0.8;
             display: flex;
             align-items: center;
-            gap: 8px; /* स्पेस बढ़ाया गया */
+            gap: 5px;
         }
 
         .msg-author-emoji {
-            font-size: 16px; /* Emoji साइज़ बढ़ाया गया */
+            font-size: 14px;
         }
 
         .msg-text {
             font-size: 13px;
-            line-height: 1.4; /* लाइन स्पेसिंग बढ़ाई गई */
+            line-height: 1.3;
         }
 
         .msg-time {
-            font-size: 9px; /* फॉन्ट साइज़ कम किया गया */
+            font-size: 8px;
             opacity: 0.6;
-            margin-top: 5px; /* मार्जिन बढ़ाया गया */
+            margin-top: 3px;
             text-align: right; /* समय को दाईं ओर */
         }
 
         /* इनपुट एरिया */
         .input-area {
-            padding: 15px; /* पैडिंग बढ़ाई गई */
+            padding: 12px 15px;
             background: rgba(0, 0, 0, 0.1);
             border-top: 1px solid rgba(255, 255, 255, 0.1);
             flex-shrink: 0; /* सिकुड़ेगा नहीं */
@@ -467,42 +526,37 @@
         .input-box {
             display: flex;
             background: rgba(255, 255, 255, 0.9);
-            border-radius: 30px; /* गोल किनारे और बड़े */
-            padding: 5px; /* पैडिंग बढ़ाई गई */
+            border-radius: 25px;
+            padding: 3px;
             align-items: center;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15); /* शैडो और गहरा */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
         .msg-input {
             flex: 1;
             border: none;
-            padding: 12px 20px; /* पैडिंग बढ़ाई गई */
-            border-radius: 25px; /* गोल किनारे */
-            font-size: 14px; /* फॉन्ट साइज़ बढ़ाया गया */
+            padding: 10px 15px;
+            border-radius: 22px;
+            font-size: 13px;
             outline: none; /* आउटलाइन हटाना */
             background: transparent; /* बैकग्राउंड को इनपुट बॉक्स से लेना */
-            color: #333; /* टेक्स्ट का रंग */
-        }
-
-        .msg-input::placeholder {
-            color: rgba(51, 51, 51, 0.6); /* प्लेसहोल्डर रंग */
         }
 
         .send-btn {
             background: linear-gradient(45deg, #667eea, #764ba2); /* बैंगनी ग्रेडिएंट */
             color: white;
             border: none;
-            width: 45px; /* साइज़ बढ़ाया गया */
-            height: 45px; /* साइज़ बढ़ाया गया */
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            font-size: 18px; /* Icon साइज़ बढ़ाया गया */
-            margin-left: 8px; /* इनपुट से थोड़ी दूरी */
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            font-size: 14px;
+            margin-left: 5px; /* इनपुट से थोड़ी दूरी */
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.4);
         }
 
         .send-btn:hover {
@@ -514,22 +568,22 @@
             background: linear-gradient(45deg, #48dbfb, #0abde3); /* नीला ग्रेडिएंट */
             color: white;
             border: none;
-            width: 45px; /* साइज़ बढ़ाया गया */
-            height: 45px; /* साइज़ बढ़ाया गया */
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            font-size: 22px; /* Icon साइज़ बढ़ाया गया */
+            font-size: 20px;
             font-weight: bold;
-            margin-left: 8px; /* इनपुट से थोड़ी दूरी */
+            margin-left: 5px;
         }
 
         .attachment-btn:hover {
             transform: scale(1.1) rotate(90deg); /* रोटेट इफ़ेक्ट */
-            box-shadow: 0 4px 15px rgba(72, 219, 251, 0.4);
+            box-shadow: 0 3px 10px rgba(72, 219, 251, 0.4);
         }
 
         .attachment-menu {
@@ -539,13 +593,12 @@
             background: rgba(0, 0, 0, 0.7); /* गहरा पारदर्शी बैकग्राउंड */
             backdrop-filter: blur(10px);
             border-radius: 15px;
-            padding: 12px; /* पैडिंग बढ़ाई गई */
+            padding: 10px;
             display: none; /* डिफ़ॉल्ट रूप से छिपा हुआ */
             grid-template-columns: 1fr 1fr; /* 2 कॉलम */
             gap: 10px;
             z-index: 101; /* इनपुट बॉक्स के ऊपर */
             animation: popIn 0.2s ease;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3); /* शैडो */
         }
 
         .attachment-menu.show {
@@ -559,13 +612,13 @@
             padding: 12px 15px;
             border-radius: 10px;
             cursor: pointer;
-            font-size: 13px; /* फॉन्ट साइज़ बढ़ाया गया */
+            font-size: 12px;
             font-weight: bold;
             transition: all 0.2s ease;
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 10px; /* स्पेस बढ़ाया गया */
+            gap: 8px;
         }
 
         .attachment-option:hover {
@@ -580,20 +633,16 @@
 
         /* स्क्रॉलबार स्टाइलिंग */
         ::-webkit-scrollbar {
-            width: 6px; /* स्क्रॉलबार की चौड़ाई */
+            width: 4px;
         }
 
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05); /* ट्रैक का बैकग्राउंड */
-            border-radius: 3px; /* ट्रैक के गोल किनारे */
+            background: transparent; /* ट्रैक को पारदर्शी */
         }
 
         ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.3); /* थंब को हल्का पारदर्शी */
-            border-radius: 3px; /* थंब के गोल किनारे */
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5); /* होवर पर और पारदर्शी */
+            border-radius: 2px;
         }
 
         /* मोबाइल रिस्पॉन्सिव */
@@ -604,47 +653,31 @@
 
             .users-panel {
                 width: 100%;
-                height: 130px; /* ऊंचाई थोड़ी बढ़ाई गई */
+                height: 120px; /* ऊंचाई कम */
                 flex-shrink: 0;
             }
 
             .users-list {
                 display: flex; /* क्षैतिज स्क्रॉल के लिए */
                 overflow-x: auto; /* क्षैतिज स्क्रॉल */
-                height: calc(100% - 65px); /* हेडर की ऊंचाई छोड़कर */
-                padding: 10px 15px; /* पैडिंग बढ़ाई गई */
+                height: calc(100% - 50px); /* हेडर की ऊंचाई छोड़कर */
             }
 
             .user-item {
-                min-width: 180px; /* मिनिमम चौड़ाई */
-                margin-right: 10px; /* क्षैतिज स्पेस */
-                margin-bottom: 0; /* वर्टिकल मार्जिन हटाया */
+                min-width: 160px; /* मिनिमम चौड़ाई */
+                margin-right: 8px; /* क्षैतिज स्पेस */
             }
-
-            .user-avatar {
-                width: 45px;
-                height: 45px;
-                font-size: 22px;
-            }
-
-            .user-name { font-size: 15px; }
-            .user-status { font-size: 12px; }
 
             .chat-area {
-                height: calc(100vh - 180px); /* मोबाइल पर कुल ऊंचाई */
+                height: calc(100vh - 170px); /* मोबाइल पर कुल ऊंचाई */
             }
 
             .messages-container {
-                max-height: calc(100vh - 300px); /* इनपुट और हेडर को छोड़कर */
+                max-height: calc(100vh - 280px); /* इनपुट और हेडर को छोड़कर */
             }
 
-            .home-btn, .profile-btn, .share-btn {
-                padding: 6px 15px;
-                font-size: 12px;
-            }
-
-            .header .app-title {
-                font-size: 18px;
+            .header-menu {
+                top: 65px; /* हेडर के ठीक नीचे */
             }
 
             .modal-content {
@@ -652,47 +685,59 @@
                 margin: 5% auto; /* मोबाइल पर और ऊपर से */
             }
 
+            .modal-header .close {
+                top: 10px; /* एडजस्ट किया गया */
+                right: 10px; /* एडजस्ट किया गया */
+            }
+
             .emoji-selector {
                 grid-template-columns: repeat(6, 1fr); /* मोबाइल पर कम कॉलम */
             }
 
-            .emoji-option { font-size: 20px; }
-
             .attachment-menu {
-                bottom: 80px; /* इनपुट के ऊपर थोड़ी और जगह */
-                left: 50%; /* बीच में लाने के लिए */
-                transform: translateX(-50%); /* सेंटर अलाइन करने के लिए */
-            }
-
-            .header {
-                height: auto; /* हेडर की ऊंचाई एडजस्ट करें */
-                flex-wrap: wrap; /* मोबाइल पर एलिमेंट्स को रैप करें */
-                justify-content: center; /* सेंटर अलाइन करें */
-                padding: 10px 10px;
-            }
-            .header .app-title {
-                order: 1; /* टाइटल को बीच में लाएं */
-                margin: 8px 0;
-            }
-            .header-buttons {
-                order: 2; /* बटन को टाइटल के नीचे लाएं */
-                margin-top: 5px;
+                bottom: 75px; /* इनपुट के ऊपर थोड़ी और जगह */
             }
         }
     </style>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+
+<script type="text/javascript">
+	atOptions = {
+		'key' : 'dfb9f45a0bfc2772a4f0f47ce1391707',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/dfb9f45a0bfc2772a4f0f47ce1391707/invoke.js"></script>
+
+
+
     <!-- Header -->
     <div class="header">
-        <button class="home-btn" id="homeBtn">
-            🏠 <span id="userName">UserXYZ</span>
-        </button>
-        <div class="app-title">🗣️</div>
-        <div class="header-buttons">
-            <button class="share-btn" id="shareAppBtn">🚀 शेयर करें</button>
-            <button class="profile-btn" id="profileBtn">
-                👤 प्रोफाइल
+        <div class="header-left">
+            <!-- Menu Button (Home Button Functionality) -->
+            <button class="menu-btn" id="menuBtn" aria-label="मेनू खोलें">
+                <i class="fas fa-bars"></i>
             </button>
+            <div class="app-title">चैट</div>
+        </div>
+
+        <!-- Header Menu (Hidden by default) -->
+        <div id="headerMenu" class="header-menu">
+            <a href="#" class="header-menu-item" id="menuProfileLink" role="button">
+                <i class="fas fa-user"></i> प्रोफ़ाइल
+            </a>
+            <a href="#" class="header-menu-item" id="menuShareLink" role="button">
+                <i class="fas fa-share-alt"></i> शेयर करें
+            </a>
+            <a href="#" class="header-menu-item" id="menuFavFriendsLink" role="button">
+                <i class="fas fa-users"></i> पसंदीदा दोस्त
+            </a>
         </div>
     </div>
 
@@ -700,8 +745,8 @@
     <div id="profileModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>प्रोफाइल सेटअप</h3>
-                <button class="close" id="closeModal">×</button>
+                <h3>प्रोफ़ाइल सेटअप</h3>
+                <button class="close" id="closeProfileModal" aria-label="मोडल बंद करें">×</button>
             </div>
             <div class="profile-form">
                 <div class="form-group">
@@ -719,12 +764,12 @@
         </div>
     </div>
 
-    <!-- Favorite Friends Modal (होम बटन पर क्लिक करने पर खुलेगा) -->
+    <!-- Favorite Friends Modal -->
     <div id="favFriendsModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
                 <h3>पसंदीदा दोस्त</h3>
-                <button class="close" id="closeFavFriendsModal">×</button>
+                <button class="close" id="closeFavFriendsModal" aria-label="मोडल बंद करें">×</button>
             </div>
             <div id="favFriendsList">
                 <!-- Favorite friends will be listed here -->
@@ -750,6 +795,10 @@
             <div class="chat-header" id="chatHeader">
                 <button class="back-to-general-btn" id="backToGeneralBtn">⬅️ सामान्य चैट</button>
                 💬 सामान्य चैट
+                <!-- New Clear Chat Button -->
+                <button class="clear-chat-btn" id="clearChatBtn" aria-label="सामान्य चैट साफ़ करें">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
             </div>
 
             <div class="messages-container" id="messagesContainer">
@@ -759,9 +808,9 @@
             <div class="input-area">
                 <div class="input-box">
                     <!-- अटैचमेंट बटन -->
-                    <button id="attachmentBtn" class="attachment-btn">+</button>
+                    <button id="attachmentBtn" class="attachment-btn" aria-label="अटैचमेंट विकल्प खोलें">+</button>
                     <input type="text" id="msgInput" class="msg-input" placeholder="मैसेज...">
-                    <button id="sendBtn" class="send-btn">➤</button>
+                    <button id="sendBtn" class="send-btn" aria-label="संदेश भेजें">➤</button>
                 </div>
                 <!-- अटैचमेंट मेनू -->
                 <div id="attachmentMenu" class="attachment-menu">
@@ -780,7 +829,7 @@
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-storage.js"></script>
 
     <script>
-        // Firebase config
+        // --- Firebase Configuration ---
         const firebaseConfig = {
             apiKey: "AlzaSyDVsNMK4XKmKQCdJdP3ywgrrtynRePec1g",
             authDomain: "tic-24b14.firebaseapp.com",
@@ -795,104 +844,79 @@
         firebase.initializeApp(firebaseConfig);
         const db = firebase.database();
 
-        // Available emojis for profile
+        // --- App State and User Variables ---
         const availableEmojis = [
             '👧', '👨', '👩', '🙅‍♂️', '🙆‍♀️', '🙆‍♂️', '🙋‍♀️', '🙋‍♂️',
             '🙎‍♀️', '🤷‍♂️', '🤷‍♀️', '🤦‍♀️', '👦', '👴', '👵', '🧑',
             '👨‍💼', '👩‍💼', '👨‍🎓', '👩‍🎓', '👨‍⚕️', '👩‍⚕️', '👨‍🏫', '👩‍🏫',
             '👮‍♂️', '👮‍♀️', '👷‍♂️', '👷‍♀️', '💂‍♂️', '💂‍♀️', '🕵️‍♂️', '🕵️‍♀️',
-            '😇', '🤠', '🤡', '😈', '👻', '👽', '🤖', '😺', '🐶'
+            '😇', '🤠', '🤡', '😈', '👻', '👽', '🤖', '😺', '🐶', '🐱'
         ];
 
-        // User setup
-        let myName = "User" + Math.floor(Math.random() * 999);
-        let myEmoji = '👤';
+        let myName = "User" + Math.floor(Math.random() * 999); // Default random name
+        let myEmoji = '👤'; // Default emoji
 
         // Load saved profile from localStorage
         const savedProfile = JSON.parse(localStorage.getItem('chatProfile') || '{}');
         if (savedProfile.name) {
             myName = savedProfile.name;
-            myEmoji = savedProfile.emoji || '👤';
+            myEmoji = savedProfile.emoji || '👤'; // Use saved emoji or default
         }
 
-        document.getElementById('userName').textContent = myName;
+        const myId = db.ref().push().key; // Unique ID for the current user
+        const usersRef = db.ref('online_users'); // Reference for online users
+        const myUserRef = usersRef.child(myId); // Reference for the current user's status
+        const favFriendsRef = db.ref(`favorite_friends/${myId}`); // Reference for user's favorite friends
+        const generalMessagesRef = db.ref('messages'); // Reference for general chat messages
+        const directMessagesRef = db.ref('direct_messages'); // Reference for direct messages
 
-        const myId = db.ref().push().key; // Firebase द्वारा उत्पन्न अद्वितीय कुंजी
-        const usersRef = db.ref('online_users');
-        const myUserRef = usersRef.child(myId);
-        const favFriendsRef = db.ref(`favorite_friends/${myId}`);
-        const messagesRef = db.ref('messages'); // सामान्य चैट के लिए संदेश
-        const directMessagesRef = db.ref('direct_messages'); // डायरेक्ट मैसेज के लिए
+        let onlineUsers = 0; // Counter for online users
+        const userElements = {}; // To store DOM elements for online users
+        const favFriendElements = {}; // To store DOM elements for favorite friends
+        let currentChatTarget = null; // Stores the target user for direct messages
 
-        // Store listeners so we can remove them later if needed
+        // Listeners for Firebase data changes
         let generalMessagesListener = null;
-        let dmMessagesListener = null; // DM संदेशों के लिए अलग लिसनर
+        let dmMessagesListener = null;
 
-        // Add user online
-        function updateUserStatus() {
-            myUserRef.set({
-                name: myName,
-                emoji: myEmoji,
-                time: Date.now()
-            });
-        }
+        // --- DOM Element References ---
+        const menuBtn = document.getElementById('menuBtn');
+        const headerMenu = document.getElementById('headerMenu');
 
-        updateUserStatus();
-        myUserRef.onDisconnect().remove(); // कनेक्शन टूटने पर खुद को हटा दें
-
-        // DOM Elements
-        const messagesContainer = document.getElementById('messagesContainer');
-        const msgInput = document.getElementById('msgInput');
-        const sendBtn = document.getElementById('sendBtn');
-        const usersList = document.getElementById('usersList');
-        const userCount = document.getElementById('userCount');
-        const homeBtn = document.getElementById('homeBtn');
-        const profileBtn = document.getElementById('profileBtn');
+        const profileBtn = document.getElementById('menuProfileLink');
         const profileModal = document.getElementById('profileModal');
-        const closeModal = document.getElementById('closeModal');
+        const closeModalProfile = document.getElementById('closeProfileModal');
         const nameInput = document.getElementById('nameInput');
         const emojiSelector = document.getElementById('emojiSelector');
-        const saveProfile = document.getElementById('saveProfile');
-        const shareAppBtn = document.getElementById('shareAppBtn');
-        const attachmentBtn = document.getElementById('attachmentBtn');
-        const attachmentMenu = document.getElementById('attachmentMenu');
+        const saveProfileBtn = document.getElementById('saveProfile');
+        let selectedEmoji = myEmoji; // Tracks currently selected emoji in profile modal
+
+        const shareAppBtn = document.getElementById('menuShareLink');
+        const favFriendsBtn = document.getElementById('menuFavFriendsLink');
         const favFriendsModal = document.getElementById('favFriendsModal');
         const closeFavFriendsModal = document.getElementById('closeFavFriendsModal');
         const favFriendsListDiv = document.getElementById('favFriendsList');
+
+        const usersList = document.getElementById('usersList');
+        const userCount = document.getElementById('userCount');
+
+        const messagesContainer = document.getElementById('messagesContainer');
+        const msgInput = document.getElementById('msgInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const attachmentBtn = document.getElementById('attachmentBtn');
+        const attachmentMenu = document.getElementById('attachmentMenu');
+
         const chatHeader = document.getElementById('chatHeader');
         const backToGeneralBtn = document.getElementById('backToGeneralBtn');
+        const clearChatBtn = document.getElementById('clearChatBtn'); // Reference to the new clear chat button
 
-        let onlineUsers = 0;
-        let selectedEmoji = myEmoji;
-        const userElements = {}; // DOM elements for users in the sidebar
-        const favFriendElements = {}; // DOM elements for favorite friends
-        let currentChatTarget = null; // Stores { id: '...', name: '...', emoji: '...' } for DM
+        // --- Functions ---
 
-        // Emoji Selector को पॉपुलेट करें
-        availableEmojis.forEach(emoji => {
-            const emojiBtn = document.createElement('button');
-            emojiBtn.className = 'emoji-option';
-            emojiBtn.textContent = emoji;
-            emojiBtn.onclick = () => {
-                document.querySelectorAll('.emoji-option').forEach(btn => btn.classList.remove('selected'));
-                emojiBtn.classList.add('selected');
-                selectedEmoji = emoji; // चयनित emoji को स्टोर करें
-            };
-            emojiSelector.appendChild(emojiBtn);
-        });
-
-        // Initialize selected emoji display
-        const initialEmojiButtons = emojiSelector.querySelectorAll('.emoji-option');
-        initialEmojiButtons.forEach(btn => {
-            if (btn.textContent === myEmoji) {
-                btn.classList.add('selected');
-            }
-        });
-
-        // Modal functions
-        profileBtn.onclick = () => {
+        /**
+         * Initializes the user's profile interface with saved or default values.
+         */
+        function initializeUserProfile() {
             nameInput.value = myName;
-            // Currently selected emoji को हाइलाइट करें
             const emojiButtons = emojiSelector.querySelectorAll('.emoji-option');
             emojiButtons.forEach(btn => {
                 btn.classList.remove('selected');
@@ -900,70 +924,71 @@
                     btn.classList.add('selected');
                 }
             });
-            selectedEmoji = myEmoji; // वर्तमान emoji को चयनित के रूप में सेट करें
-            profileModal.style.display = 'block';
-        };
+            selectedEmoji = myEmoji; // Set initial selected emoji
+        }
 
-        closeModal.onclick = () => {
-            profileModal.style.display = 'none';
-        };
+        /**
+         * Updates the user's presence and details in the Firebase database.
+         * Also sets up a listener to remove the user if the connection is lost.
+         */
+        function updateUserStatus() {
+            myUserRef.set({
+                name: myName,
+                emoji: myEmoji,
+                time: Date.now() // Timestamp for last seen/online time
+            });
+            myUserRef.onDisconnect().remove(); // Automatically remove user from online_users when disconnected
+        }
 
-        // Modal के बाहर क्लिक करने पर मोडल बंद करें
-        window.onclick = (e) => {
-            if (e.target === profileModal) {
-                profileModal.style.display = 'none';
-            }
-            if (e.target === favFriendsModal) {
-                favFriendsModal.style.display = 'none';
-            }
-            // अगर मेनू के बाहर क्लिक किया जाता है तो मेनू बंद करें
-            if (!attachmentMenu.contains(e.target) && e.target !== attachmentBtn) {
-                attachmentMenu.classList.remove('show');
-            }
-        };
+        /**
+         * Populates the emoji selector in the profile modal.
+         */
+        function populateEmojiSelector() {
+            availableEmojis.forEach(emoji => {
+                const emojiBtn = document.createElement('button');
+                emojiBtn.className = 'emoji-option';
+                emojiBtn.textContent = emoji;
+                emojiBtn.onclick = () => {
+                    // Remove 'selected' class from all other emoji buttons
+                    document.querySelectorAll('.emoji-option').forEach(btn => btn.classList.remove('selected'));
+                    emojiBtn.classList.add('selected'); // Add 'selected' class to the clicked emoji
+                    selectedEmoji = emoji; // Update the currently selected emoji
+                };
+                emojiSelector.appendChild(emojiBtn);
+            });
+        }
 
-        // प्रोफाइल सेव करें
-        saveProfile.onclick = () => {
+        /**
+         * Saves the user's profile changes (name and emoji) to localStorage and Firebase.
+         */
+        function saveUserProfile() {
             const newName = nameInput.value.trim();
             if (newName) {
                 myName = newName;
                 myEmoji = selectedEmoji;
-
-                // localStorage में सेव करें
-                localStorage.setItem('chatProfile', JSON.stringify({
-                    name: myName,
-                    emoji: myEmoji
-                }));
-
-                document.getElementById('userName').textContent = myName; // हेडर में नाम अपडेट करें
-                updateUserStatus(); // Firebase में स्थिति अपडेट करें
-                profileModal.style.display = 'none'; // मोडल बंद करें
+                localStorage.setItem('chatProfile', JSON.stringify({ name: myName, emoji: myEmoji }));
+                updateUserStatus(); // Update status in Firebase
+                profileModal.style.display = 'none'; // Close the modal
+                alert("प्रोफ़ाइल सफलतापूर्वक सेव हो गई है!");
             } else {
                 alert('कृपया अपना नाम दर्ज करें।');
             }
-        };
+        }
 
-        // Home button: पसंदीदा दोस्तों को दिखाता है
-        homeBtn.addEventListener('click', () => {
-            loadFavoriteFriends(); // पसंदीदा दोस्तों को लोड करें
-            favFriendsModal.style.display = 'block';
-        });
-
-        closeFavFriendsModal.onclick = () => {
-            favFriendsModal.style.display = 'none';
-        };
-
-        // पसंदीदा दोस्तों को लोड करने का फ़ंक्शन
+        /**
+         * Loads and displays the user's favorite friends from Firebase.
+         */
         function loadFavoriteFriends() {
-            favFriendsListDiv.innerHTML = ''; // पिछली सूची को साफ़ करें
-            favFriendsRef.once('value', (snapshot) => {
+            favFriendsListDiv.innerHTML = ''; // Clear previous list
+            favFriendsRef.once('value', (snapshot) => { // Get favorite friends once
                 const friends = snapshot.val();
                 if (friends) {
-                    const friendIds = Object.keys(friends).sort((a, b) => friends[a].addedTime - friends[b].addedTime); // समय के अनुसार सॉर्ट करें
+                    // Sort friends by the time they were added
+                    const friendIds = Object.keys(friends).sort((a, b) => friends[a].addedTime - friends[b].addedTime);
                     friendIds.forEach(friendId => {
                         const friend = friends[friendId];
                         const favFriendEl = document.createElement('div');
-                        favFriendEl.className = 'user-item fav-friend-item'; // स्टाइलिंग के लिए क्लास का पुन: उपयोग करें
+                        favFriendEl.className = 'user-item fav-friend-item';
                         favFriendEl.innerHTML = `
                             <div class="user-avatar">${friend.emoji || '👤'}</div>
                             <div class="user-details">
@@ -971,7 +996,7 @@
                                 <div class="user-status">पसंदीदा</div>
                             </div>
                         `;
-                        // पसंदीदा दोस्त पर क्लिक करने पर डायरेक्ट मैसेज शुरू करें
+                        // Set click handler to start direct message with the favorite friend
                         favFriendEl.onclick = () => startDirectMessage(friendId, friend.name, friend.emoji);
                         favFriendsListDiv.appendChild(favFriendEl);
                     });
@@ -981,7 +1006,12 @@
             });
         }
 
-        // किसी उपयोगकर्ता को पसंदीदा दोस्त के रूप में जोड़ने का फ़ंक्शन
+        /**
+         * Adds a user to the current user's favorite friends list in Firebase.
+         * @param {string} userId - The ID of the user to add.
+         * @param {string} userName - The name of the user to add.
+         * @param {string} userEmoji - The emoji of the user to add.
+         */
         function addFavoriteFriend(userId, userName, userEmoji) {
             favFriendsRef.child(userId).set({
                 name: userName,
@@ -989,137 +1019,61 @@
                 addedTime: Date.now()
             }).then(() => {
                 alert(`${userName} को पसंदीदा में जोड़ा गया!`);
-                loadFavoriteFriends(); // सूची को रीफ़्रेश करें
+                loadFavoriteFriends(); // Refresh the list
             }).catch(error => {
                 console.error("पसंदीदा दोस्त जोड़ने में त्रुटि: ", error);
                 alert(`त्रुटि: ${userName} को पसंदीदा में नहीं जोड़ा जा सका।`);
             });
         }
 
-        // ऐप शेयर करने का लॉजिक
-        shareAppBtn.addEventListener('click', () => {
-            const shareableLink = window.location.href;
-
-            if (navigator.share) {
-                navigator.share({
-                    title: 'चैट ऐप',
-                    text: `मेरे साथ इस चैट ऐप पर जुड़ें! ${shareableLink}`,
-                    url: shareableLink
-                }).then(() => console.log('Successfully shared'))
-                  .catch((error) => console.error('Error sharing:', error));
-            } else {
-                // अगर शेयर API उपलब्ध नहीं है
-                navigator.clipboard.writeText(`मेरे साथ इस चैट ऐप पर जुड़ें! ${shareableLink}`)
-                    .then(() => {
-                        alert('ऐप का लिंक क्लिपबोर्ड पर कॉपी हो गया है!');
-                    })
-                    .catch((err) => {
-                        console.error('Failed to copy link: ', err);
-                        alert('क्लिपबोर्ड पर कॉपी करने में असमर्थ। कृपया मैन्युअल रूप से लिंक कॉपी करें: ' + shareableLink);
-                    });
-            }
-        });
-
-        // मैसेज भेजने का फ़ंक्शन
+        /**
+         * Sends a message either to the general chat or a direct message.
+         * @param {string} messageText - The content of the message.
+         * @param {string} messageType - Type of message ('text' for general, 'dm' for direct).
+         * @param {string|null} recipientId - ID of the recipient for DM.
+         * @param {string|null} recipientName - Name of the recipient for DM.
+         * @param {string|null} recipientEmoji - Emoji of the recipient for DM.
+         */
         function sendMessage(messageText, messageType = 'text', recipientId = null, recipientName = null, recipientEmoji = null) {
             const messageData = {
                 name: myName,
                 emoji: myEmoji,
                 text: messageText,
                 time: Date.now(),
-                userId: myId,
-                type: messageType // 'text', 'dm', 'image', 'audio' etc.
+                userId: myId, // Sender's ID
+                type: messageType
             };
 
-            if (messageType === 'dm') {
+            if (messageType === 'dm' && recipientId) {
                 messageData.recipientId = recipientId;
                 messageData.recipientName = recipientName;
                 messageData.recipientEmoji = recipientEmoji;
 
-                // डायरेक्ट मैसेज को दोनों तरफ से सहेजें
+                // Store DM in both sender's and receiver's DM path for easier retrieval
                 const senderRef = directMessagesRef.child(myId).child(recipientId);
                 const receiverRef = directMessagesRef.child(recipientId).child(myId);
 
                 senderRef.push(messageData);
                 receiverRef.push(messageData);
             } else {
-                // सामान्य चैट संदेश
-                messagesRef.push(messageData);
+                // Send to general chat
+                generalMessagesRef.push(messageData);
             }
-            msgInput.value = ''; // इनपुट बॉक्स खाली करें
+            msgInput.value = ''; // Clear the input field
         }
 
-        // सेंड बटन पर क्लिक करने पर
-        sendBtn.addEventListener('click', () => {
-            const text = msgInput.value.trim();
-            if (text !== "") {
-                if (currentChatTarget) { // अगर डायरेक्ट मैसेजिंग में हैं
-                    sendMessage(text, 'dm', currentChatTarget.id, currentChatTarget.name, currentChatTarget.emoji);
-                } else { // अगर सामान्य चैट में हैं
-                    sendMessage(text, 'text');
-                }
-            }
-        });
-
-        // Enter दबाने पर मैसेज भेजें
-        msgInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                sendBtn.click(); // सेंड बटन पर क्लिक का अनुकरण करें
-            }
-        });
-
-        // डायरेक्ट मैसेज चैट शुरू करने का फ़ंक्शन
-        function startDirectMessage(userId, userName, userEmoji) {
-            currentChatTarget = { id: userId, name: userName, emoji: userEmoji };
-            chatHeader.innerHTML = `<button class="back-to-general-btn" id="backToGeneralBtn">⬅️ सामान्य चैट</button>💬 डायरेक्ट मैसेज (${userName})`; // हेडर अपडेट करें
-            messagesContainer.innerHTML = ''; // पिछले संदेशों को साफ़ करें
-
-            // यदि कोई पुराना DM लिसनर है तो उसे हटा दें
-            if (dmMessagesListener) {
-                directMessagesRef.child(myId).child(currentChatTarget.id).off('child_added', dmMessagesListener);
-            }
-            // यदि सामान्य संदेश लिसनर चल रहा है तो उसे हटा दें
-            if (generalMessagesListener) {
-                messagesRef.off('child_added', generalMessagesListener);
-                generalMessagesListener = null; // Null सेट करें
-            }
-
-            // नए डायरेक्ट मैसेज के लिए लिसनर सेट करें
-            dmMessagesListener = directMessagesRef.child(myId).child(userId).orderByChild('time').on('child_added', handleMessage);
-
-            // backToGeneralBtn को फिर से सेट करें
-            document.getElementById('backToGeneralBtn').onclick = backToGeneralChat;
-
-            messagesContainer.scrollTop = messagesContainer.scrollHeight; // नीचे स्क्रॉल करें
-            favFriendsModal.style.display = 'none'; // पसंदीदा दोस्तों का मोडल बंद करें
-        }
-
-        // सामान्य चैट पर वापस जाने का फ़ंक्शन
-        function backToGeneralChat() {
-            currentChatTarget = null;
-            chatHeader.innerHTML = `💬 सामान्य चैट`; // हेडर को सामान्य चैट पर रीसेट करें
-            messagesContainer.innerHTML = ''; // वर्तमान संदेशों को साफ़ करें
-
-            // यदि कोई पुराना DM लिसनर है तो उसे हटा दें
-            if (dmMessagesListener) {
-                directMessagesRef.child(myId).child(userId).off('child_added', dmMessagesListener); // userId का स्कोप यहाँ समस्या कर सकता है, सुनिश्चित करें
-                dmMessagesListener = null; // Null सेट करें
-            }
-
-            // सामान्य चैट संदेशों के लिए लिसनर को फिर से अटैच करें
-            loadGeneralMessages();
-        }
-
-        // किसी भी प्रकार के संदेश (सामान्य या DM) को संभालने का फ़ंक्शन
+        /**
+         * Handles the display of incoming and outgoing messages in the chat container.
+         * @param {object} snap - Firebase snapshot containing the message data.
+         */
         function handleMessage(snap) {
             const msg = snap.val();
             const msgEl = document.createElement('div');
 
-            // संदेश भेजने वाला कौन है यह जांचें
-            const isMe = msg.userId === myId;
-            msgEl.className = `message ${isMe ? 'sent' : 'received'}`;
+            const isMe = msg.userId === myId; // Check if the message is from the current user
+            msgEl.className = `message ${isMe ? 'sent' : 'received'}`; // Set appropriate class for styling
 
-            // DM संदेश के लिए प्राप्तकर्ता का नाम दिखाएं, अगर यह मेरा संदेश नहीं है
+            // Display author's name and emoji only if it's a received message and not a DM from me to myself
             const authorDisplay = !isMe ?
                 `<div class="msg-author">
                     <span class="msg-author-emoji">${msg.emoji || '👤'}</span>
@@ -1133,34 +1087,104 @@
             `;
 
             messagesContainer.appendChild(msgEl);
-            messagesContainer.scrollTop = messagesContainer.scrollHeight; // हमेशा नीचे स्क्रॉल करें
+            // Auto-scroll to the bottom
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
         }
 
-        // सामान्य चैट संदेशों को लोड करना और सुनना
+        /**
+         * Loads general chat messages by setting up a listener on Firebase.
+         */
         function loadGeneralMessages() {
-            // सुनिश्चित करें कि पहले से कोई सामान्य लिसनर न चल रहा हो
-            if (generalMessagesListener) {
-                messagesRef.off('child_added', generalMessagesListener);
+            // Remove any existing DM listener before loading general messages
+            if (dmMessagesListener) {
+                if (currentChatTarget && currentChatTarget.id) {
+                    directMessagesRef.child(myId).child(currentChatTarget.id).off('child_added', dmMessagesListener);
+                }
+                dmMessagesListener = null;
             }
-            // 30 नवीनतम सामान्य संदेशों को लोड करें और नए संदेशों के लिए लिसनर जोड़ें
-            generalMessagesListener = messagesRef.orderByChild('time').limitToLast(30).on('child_added', handleMessage);
+            // Detach previous general messages listener if it exists
+            if (generalMessagesListener) {
+                generalMessagesRef.off('child_added', generalMessagesListener);
+            }
+            // Attach a new listener for general messages, ordered by time
+            generalMessagesListener = generalMessagesRef.orderByChild('time').on('child_added', handleMessage);
         }
 
-        // समय को फॉर्मेट करने का फ़ंक्शन
+        /**
+         * Starts a direct message conversation with a specific user.
+         * @param {string} userId - The ID of the user to chat with.
+         * @param {string} userName - The name of the user.
+         * @param {string} userEmoji - The emoji of the user.
+         */
+        function startDirectMessage(userId, userName, userEmoji) {
+            currentChatTarget = { id: userId, name: userName, emoji: userEmoji }; // Set the target user
+            // Update chat header to show the direct chat title
+            chatHeader.innerHTML = `<button class="back-to-general-btn" id="backToGeneralBtn">⬅️ सामान्य चैट</button>💬 डायरेक्ट मैसेज (${userName})`;
+            messagesContainer.innerHTML = ''; // Clear current messages
+
+            // Detach general messages listener
+            if (generalMessagesListener) {
+                generalMessagesRef.off('child_added', generalMessagesListener);
+                generalMessagesListener = null;
+            }
+            // Attach listener for direct messages from this user
+            dmMessagesListener = directMessagesRef.child(myId).child(userId).orderByChild('time').on('child_added', handleMessage);
+
+            // Add event listener to the back button
+            document.getElementById('backToGeneralBtn').onclick = backToGeneralChat;
+
+            // Close modals/menus that might be open
+            favFriendsModal.style.display = 'none';
+            headerMenu.classList.remove('show');
+            attachmentMenu.classList.remove('show');
+        }
+
+        /**
+         * Switches the chat view back to the general chat.
+         */
+        function backToGeneralChat() {
+            currentChatTarget = null; // Reset chat target
+            // Update chat header to general chat title
+            chatHeader.innerHTML = `💬 सामान्य चैट`;
+            messagesContainer.innerHTML = ''; // Clear current messages
+
+            // Detach DM listener if it's active
+            if (dmMessagesListener) {
+                // It's crucial to detach the listener for the *correct* user if the UI allows switching quickly
+                // For safety, we re-fetch currentChatTarget to ensure we're detaching the right one,
+                // though in this flow, it should be set.
+                const targetId = currentChatTarget ? currentChatTarget.id : null;
+                if (targetId) {
+                    directMessagesRef.child(myId).child(targetId).off('child_added', dmMessagesListener);
+                }
+                dmMessagesListener = null;
+            }
+
+            // Reload general messages
+            loadGeneralMessages();
+        }
+
+        /**
+         * Formats a timestamp into a readable time string (e.g., "10:30 AM").
+         * @param {number} timestamp - The Unix timestamp.
+         * @returns {string} Formatted time string.
+         */
         function formatTime(timestamp) {
             const date = new Date(timestamp);
             return date.toLocaleTimeString('hi-IN', { hour: '2-digit', minute: '2-digit' });
         }
 
-        // ऑनलाइन उपयोगकर्ताओं को सुनने के लिए लिसनर
-        usersRef.on('child_added', (snap) => {
+        /**
+         * Handles the event when a new user comes online.
+         * @param {object} snap - Firebase snapshot of the added user.
+         */
+        function handleUserAdded(snap) {
             const user = snap.val();
             const userId = snap.key;
 
-            if (userId === myId) return; // खुद को सूची में न दिखाएं
+            if (userId === myId) return; // Don't show self in the online list
 
-            // अगर उपयोगकर्ता पहले से मौजूद नहीं है
-            if (!userElements[userId]) {
+            if (!userElements[userId]) { // If this user is not already displayed
                 const userEl = document.createElement('div');
                 userEl.className = 'user-item';
                 userEl.innerHTML = `
@@ -1172,14 +1196,14 @@
                     <div class="online-dot"></div>
                 `;
 
-                usersList.appendChild(userEl);
-                userElements[userId] = userEl; // DOM तत्व को स्टोर करें
-                onlineUsers++;
-                userCount.textContent = onlineUsers; // काउंटर अपडेट करें
+                usersList.appendChild(userEl); // Add user to the list
+                userElements[userId] = userEl; // Store the element
+                onlineUsers++; // Increment online user count
+                userCount.textContent = onlineUsers; // Update the display
 
-                // उपयोगकर्ता आइटम पर क्लिक करने पर DM शुरू करें या पसंदीदा बनाएं
+                // Set click handler for the user item
                 userEl.onclick = () => {
-                    // पसंदीदा बनाने का विकल्प या डायरेक्ट मैसेज का विकल्प
+                    // Ask if they want to start a DM or add to favorites
                     if (confirm(`क्या आप ${user.name} के साथ डायरेक्ट मैसेज शुरू करना चाहते हैं?`)) {
                         startDirectMessage(userId, user.name, user.emoji);
                     } else if (confirm(`क्या आप ${user.name} को पसंदीदा दोस्त बनाना चाहते हैं?`)) {
@@ -1187,71 +1211,193 @@
                     }
                 };
             }
-        });
+        }
 
-        // जब किसी ऑनलाइन उपयोगकर्ता की जानकारी बदलती है
-        usersRef.on('child_changed', (snap) => {
+        /**
+         * Handles the event when an online user's details change (e.g., name or emoji).
+         * @param {object} snap - Firebase snapshot of the changed user.
+         */
+        function handleUserChanged(snap) {
             const user = snap.val();
             const userId = snap.key;
 
-            if (userElements[userId]) {
-                // उपयोगकर्ता तत्व को अपडेट करें
-                userElements[userId].innerHTML = `
-                    <div class="user-avatar">${user.emoji || '👤'}</div>
-                    <div class="user-details">
-                        <div class="user-name">${user.name}</div>
-                        <div class="user-status">ऑनलाइन</div>
-                    </div>
-                    <div class="online-dot"></div>
-                `;
-                // अगर यह पसंदीदा दोस्त सूची में भी है, तो उसे भी अपडेट करें
-                if (favFriendElements[userId]) {
-                    favFriendElements[userId].querySelector('.user-avatar').textContent = user.emoji || '👤';
-                    favFriendElements[userId].querySelector('.user-name').textContent = user.name;
+            if (userElements[userId]) { // Update the displayed user info if the element exists
+                userElements[userId].querySelector('.user-avatar').textContent = user.emoji || '👤';
+                userElements[userId].querySelector('.user-name').textContent = user.name;
+            }
+            // Also update in favorite friends list if present
+            if (favFriendElements[userId]) {
+                favFriendElements[userId].querySelector('.user-avatar').textContent = user.emoji || '👤';
+                favFriendElements[userId].querySelector('.user-name').textContent = user.name;
+            }
+        }
+
+        /**
+         * Handles the event when a user goes offline.
+         * @param {object} snap - Firebase snapshot of the removed user.
+         */
+        function handleUserRemoved(snap) {
+            const userId = snap.key;
+            if (userElements[userId]) { // Remove user element if it exists
+                userElements[userId].remove();
+                delete userElements[userId];
+                onlineUsers--; // Decrement online user count
+                userCount.textContent = onlineUsers; // Update the display
+            }
+        }
+
+        /**
+         * Clears the general chat messages by removing them from Firebase.
+         * IMPORTANT: This action removes messages for ALL users in the general chat.
+         */
+        function clearGeneralChat() {
+            if (confirm("क्या आप वाकई सामान्य चैट को साफ़ करना चाहते हैं? यह क्रिया पूर्ववत नहीं की जा सकती है।")) {
+                // Remove all messages from the 'messages' node in Firebase
+                generalMessagesRef.remove()
+                    .then(() => {
+                        alert("सामान्य चैट सफलतापूर्वक साफ़ कर दी गई है!");
+                        // Visually clear the messages container and ensure listeners are handled
+                        messagesContainer.innerHTML = '';
+                        // The listener should automatically re-attach and receive no messages
+                    })
+                    .catch((error) => {
+                        console.error("सामान्य चैट को साफ़ करने में त्रुटि: ", error);
+                        alert("सामान्य चैट को साफ़ करने में त्रुटि हुई।");
+                    });
+            }
+        }
+
+        // --- Event Listeners ---
+
+        // Toggle header menu
+        menuBtn.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event from closing menu immediately
+            headerMenu.classList.toggle('show');
+        });
+
+        // Close menu, modals, or attachment menu when clicking outside of them
+        window.addEventListener('click', (e) => {
+            // Close header menu
+            if (!headerMenu.contains(e.target) && e.target !== menuBtn) {
+                headerMenu.classList.remove('show');
+            }
+            // Close profile modal
+            if (profileModal.style.display === 'block' && !profileModal.contains(e.target)) {
+                profileModal.style.display = 'none';
+            }
+            // Close favorite friends modal
+            if (favFriendsModal.style.display === 'block' && !favFriendsModal.contains(e.target)) {
+                favFriendsModal.style.display = 'none';
+            }
+            // Close attachment menu
+            if (!attachmentMenu.contains(e.target) && e.target !== attachmentBtn) {
+                attachmentMenu.classList.remove('show');
+            }
+        });
+
+        // Profile modal link
+        profileBtn.addEventListener('click', () => {
+            initializeUserProfile(); // Populate modal with current data
+            profileModal.style.display = 'block';
+            headerMenu.classList.remove('show'); // Close header menu
+        });
+
+        // Share App functionality
+        shareAppBtn.addEventListener('click', () => {
+            const shareableLink = window.location.href;
+            if (navigator.share) { // Use Web Share API if available
+                navigator.share({
+                    title: 'चैट ऐप',
+                    text: `मेरे साथ इस चैट ऐप पर जुड़ें! ${shareableLink}`,
+                    url: shareableLink
+                }).then(() => console.log('Successfully shared'))
+                  .catch((error) => console.error('Error sharing:', error));
+            } else { // Fallback for browsers not supporting Web Share API
+                navigator.clipboard.writeText(`मेरे साथ इस चैट ऐप पर जुड़ें! ${shareableLink}`)
+                    .then(() => alert('ऐप का लिंक क्लिपबोर्ड पर कॉपी हो गया है!'))
+                    .catch((err) => {
+                        console.error('Failed to copy link: ', err);
+                        alert('क्लिपबोर्ड पर कॉपी करने में असमर्थ। कृपया मैन्युअल रूप से लिंक कॉपी करें: ' + shareableLink);
+                    });
+            }
+            headerMenu.classList.remove('show'); // Close header menu
+        });
+
+        // Favorite Friends link
+        favFriendsBtn.addEventListener('click', () => {
+            loadFavoriteFriends(); // Load and display favorites
+            favFriendsModal.style.display = 'block';
+            headerMenu.classList.remove('show'); // Close header menu
+        });
+
+        // Save Profile button click
+        saveProfileBtn.onclick = saveUserProfile;
+
+        // Close Profile Modal button
+        closeModalProfile.onclick = () => {
+            profileModal.style.display = 'none';
+        };
+
+        // Close Favorite Friends Modal button
+        closeFavFriendsModal.onclick = () => {
+            favFriendsModal.style.display = 'none';
+        };
+
+        // Send Message button click
+        sendBtn.addEventListener('click', () => {
+            const text = msgInput.value.trim();
+            if (text !== "") {
+                if (currentChatTarget) { // If in a direct message chat
+                    sendMessage(text, 'dm', currentChatTarget.id, currentChatTarget.name, currentChatTarget.emoji);
+                } else { // If in general chat
+                    sendMessage(text, 'text');
                 }
             }
         });
 
-        // जब कोई उपयोगकर्ता ऑफ़लाइन होता है
-        usersRef.on('child_removed', (snap) => {
-            const userId = snap.key;
-            if (userElements[userId]) {
-                userElements[userId].remove(); // DOM से हटाएं
-                delete userElements[userId]; // स्टोर से हटाएं
-                onlineUsers--;
-                userCount.textContent = onlineUsers; // काउंटर अपडेट करें
+        // Send message on Enter key press
+        msgInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendBtn.click(); // Trigger the send button click
             }
         });
 
-        // अटैचमेंट बटन क्लिक हैंडलर
+        // Toggle attachment menu
         attachmentBtn.addEventListener('click', (e) => {
-            e.stopPropagation(); // क्लिक को फैलने से रोकें
-            attachmentMenu.classList.toggle('show'); // मेनू को टॉगल करें
+            e.stopPropagation(); // Prevent closing the menu immediately
+            attachmentMenu.classList.toggle('show');
         });
 
-        // अटैचमेंट मेनू के विकल्पों के लिए हैंडलर
-        document.getElementById('photoBtn').addEventListener('click', () => {
-            alert('फोटो अपलोड फीचर अभी लागू नहीं किया गया है!');
-            attachmentMenu.classList.remove('show');
-        });
-        document.getElementById('audioBtn').addEventListener('click', () => {
-            alert('आवाज रिकॉर्डिंग फीचर अभी लागू नहीं किया गया है!');
-            attachmentMenu.classList.remove('show');
-        });
-        document.getElementById('fileBtn').addEventListener('click', () => {
-            alert('फाइल अटैचमेंट फीचर अभी लागू नहीं किया गया है!');
-            attachmentMenu.classList.remove('show');
-        });
-        document.getElementById('videoCallBtn').addEventListener('click', () => {
-            alert('वीडियो कॉल फीचर अभी लागू नहीं किया गया है!');
-            attachmentMenu.classList.remove('show');
-        });
+        // Attachment menu option click handlers (placeholders)
+        document.getElementById('photoBtn').addEventListener('click', () => { alert('फोटो अपलोड फीचर अभी लागू नहीं किया गया है!'); attachmentMenu.classList.remove('show'); });
+        document.getElementById('audioBtn').addEventListener('click', () => { alert('आवाज रिकॉर्डिंग फीचर अभी लागू नहीं किया गया है!'); attachmentMenu.classList.remove('show'); });
+        document.getElementById('fileBtn').addEventListener('click', () => { alert('फाइल अटैचमेंट फीचर अभी लागू नहीं किया गया है!'); attachmentMenu.classList.remove('show'); });
+        document.getElementById('videoCallBtn').addEventListener('click', () => { alert('वीडियो कॉल फीचर अभी लागू नहीं किया गया है!'); attachmentMenu.classList.remove('show'); });
 
-        // इनपुट पर फोकस करें जब पेज लोड होता है
-        msgInput.focus();
+        // Back to general chat button click
+        backToGeneralBtn.onclick = backToGeneralChat;
 
-        // सामान्य चैट लोड करें जब पेज लोड होता है
-        loadGeneralMessages();
+        // Clear General Chat button click
+        clearChatBtn.addEventListener('click', clearGeneralChat);
+
+        // --- Firebase Data Listeners ---
+
+        // Listen for new users coming online
+        usersRef.on('child_added', handleUserAdded);
+
+        // Listen for changes in user details (name, emoji)
+        usersRef.on('child_changed', handleUserChanged);
+
+        // Listen for users going offline
+        usersRef.on('child_removed', handleUserRemoved);
+
+        // --- Initial Load ---
+        populateEmojiSelector(); // Populate emojis in the profile modal
+        initializeUserProfile(); // Set initial user profile data
+        updateUserStatus();     // Update user status on Firebase
+        loadGeneralMessages();  // Load and display general chat messages
+        msgInput.focus();       // Set focus to the message input field
+
     </script>
 </body>
 </html>
